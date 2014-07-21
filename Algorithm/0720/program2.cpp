@@ -34,6 +34,7 @@ public:
 		while(tmp!=m_ccItems[tmp]){
 			tmp=m_ccItems[tmp];
 		}
+		m_ccItems[v] = tmp;
 		//cout<<"Find: "<<"v: "<<v<<" Comp:"<<tmp<<endl;
 		return tmp;
 	};
