@@ -153,6 +153,11 @@ int main(int argc, char* argv[]){
 		if(mapVexValue.find(val)!=mapVexValue.end()){
 			//cout<<"Exist:"<<" Value:"<<val<<endl;
 			vecVex = mapVexValue[val];
+			for(int k = 0;k<vecVex.size();k++){
+				//the distance 0 edge
+				Edge e(i,vecVex[k],0);
+				vectEdge.push_back(e);
+			}
 		}
 		vecVex.push_back(i);
 		
@@ -160,7 +165,7 @@ int main(int argc, char* argv[]){
 		//cout<<"index:"<<i<<" value: "<<val<<endl;
 		
 	}
-
+/*
 	map<int,vector<int> >::iterator itermap = mapVexValue.begin();
 	
 	int number = 0;
@@ -182,6 +187,7 @@ int main(int argc, char* argv[]){
 			//cout<<"Value: "<<(itermap->first)<<" number:"<<vecIndex.size()<<endl;
 		}
 	}
+*/
 //	cout<<"size:"<<mapVexValue.size()<<endl;
 //	cout<<"total size:"<<number<<endl;
 
@@ -235,9 +241,9 @@ int main(int argc, char* argv[]){
 	
 	//map<int,set<int> > ret = myCC.getSubComponent();
 	//cout <<"Component Size: "<<ret.size()<<endl;
-	set<int> setRet = myCC.getSubSet();
-	cout<<"cluster size ="<<setRet.size();
-
+	//set<int> setRet = myCC.getSubSet();
+	//cout<<"cluster size ="<<setRet.size();
+      cout<<"cluster size ="<<myCC.getComponentNum()<<endl;
 	
 	
 
