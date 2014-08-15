@@ -2,6 +2,7 @@
 #include<fstream>
 #include<set>
 #include<map>
+#include <time.h>
 using namespace std;
 
 enum _CLOCK{
@@ -10,14 +11,16 @@ enum _CLOCK{
 	BLACK
 };
 
-map<int,set<int> > G;
-map<int,set<int> > G_t;
-map<int,int>f;
-map<int,_CLOCK> color;
-map<int,int> pi;
-map<int,set<int> > scc; //Strong Connect Component
+class My_2SAT{
 
-int t = 0;
+private:
+	map<int,set<int> > G;
+	map<int,set<int> > G_t;
+	map<int,int>f;
+	map<int,_CLOCK> color;
+	map<int,int> pi;
+	map<int,set<int> > scc; //Strong Connect Component
+	int t;
 
 void DFS_VISIT_G(int u){
 	color[u] = GRAY;
@@ -94,8 +97,8 @@ void getSCC(){
 	}
 }
 
-bool isSCC_2SAT(){
-	bool ret = true;
+int isSCC_2SAT(){
+	bool ret = 1;
 	map<int,set<int> >::iterator iter = scc.begin();
 	for(;iter != scc.end();iter++){
 		set<int> &s = iter->second;
@@ -105,7 +108,7 @@ bool isSCC_2SAT(){
 			int u = *iterSet;
 			u= 0-u;
 			if(s.find(u) != s.end()){
-				return false;
+				return 0;
 			}
 		}
 
@@ -125,17 +128,23 @@ void addEdgeToGraph(int u,int v,map<int,set<int> > &G){
 	}
 }
 
-
-int main(int argc, char* argv[]){
-	if(argc < 2){
-        cout<<"Please input file."<<endl<<"Usage: "<<argv[0]<<" /your path/2sat.txt"<<endl;
-        return 0;
-    }
-	
+public:
+	My_2SAT(){
+		t = 0;
+	};
+	~My_2SAT(){
+		G.clear();
+		G_t.clear();
+		f.clear();
+		color.clear();
+		pi.clear();
+		scc.clear();
+	};
+int do_main(char* filePath){
 	int num = 0;
-	ifstream infile(argv[1],ios::in);
+	ifstream infile(filePath,ios::in);
 	infile>>num;
-	cout<<"Number: "<<num<<endl;
+//	cout<<"Number: "<<num<<endl;
 	
 	for(int i=0;i<num;i++){
 		//read data from file ,and generate G and G_t;
@@ -159,8 +168,31 @@ int main(int argc, char* argv[]){
 	DFS_G();
 	DFS_G_t();
 	getSCC();
-	cout<<"Result: "<<isSCC_2SAT()<<endl;
-	
-	cout<<"Over"<<endl;
+	int result = isSCC_2SAT();
+//	cout<<"Result: "<<result<<endl;
+	infile.close();
+	return result;
+}
+
+};
+
+int main(int argc, char* argv[]){
+
+	if(argc < 2){
+        cout<<"Please input file."<<endl<<"Usage: "<<argv[0]<<" /your path/2sat.txt /your path/2sat.txt /your path/2sat.txt ..."<<endl;
+        return 0;
+    }
+	time_t tBegin = time(NULL);
+	cout<<"The Result is "<<endl;
+	for(int i = 1;i<argc;i++){
+		My_2SAT* pMy_2SAT = new My_2SAT();
+		cout<<pMy_2SAT->do_main(argv[i]);
+		delete pMy_2SAT;
+	}
+	cout<<endl;
+
+	time_t tEnd = time(NULL);
+	cout<<"Seconds:"<<tEnd-tBegin<<endl;
+	cout<<"Used Minutes:"<<(tEnd-tBegin)/60<<" Seconds:"<<((tEnd-tBegin)%60)<<endl;
 	return 0;
 }
