@@ -1,0 +1,3 @@
+
+1.如果新增Form,只需要从FormTemplate继承，然后在Program.cs中，加上wizardMana.insertForm(new Form());即可，不需要改动任何其它代码。
+2.Form的顺序就是Program.cs中 wizardMana.insertForm()的调用顺序。
