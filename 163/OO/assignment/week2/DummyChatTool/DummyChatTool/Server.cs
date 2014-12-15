@@ -10,8 +10,7 @@ using System.IO;
 using System.Runtime.Serialization;
 namespace DummyChatTool
 {
-    [Serializable]
-    public partial class Server : Form, ISerializable
+    public partial class Server : Form
     {
         private Server()
         {
@@ -19,12 +18,6 @@ namespace DummyChatTool
             listClient = new List<Client>();
             Init();
         }
-
-        private Server(SerializationInfo info, StreamingContext ctxt)
-        {
- 
-        }
-
 
         private void Init()
         {
@@ -192,14 +185,7 @@ namespace DummyChatTool
             }
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-        {
-            info.AddValue("client_num", listClient.Count);
-            foreach (Client c in listClient)
-            {
-                info.AddValue("",c.getContacts().ToArray());
-            }
-        }
+
         /*
                 public byte[] SerializeBinary(object request)
                 {
