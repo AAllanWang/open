@@ -98,6 +98,11 @@ namespace DummyChatTool
             return listMsg;
         }
 
+        public List<string> getContacts()
+        {
+            return listContacts;
+        }
+
         private string name;
         
         private List<string> listContacts;

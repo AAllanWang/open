@@ -8,12 +8,8 @@ using System.Runtime.Serialization;
 namespace DummyChatTool
 {
     [Serializable]
-    public class Message : ISerializable
+    public class Message 
     {
-        private Message(SerializationInfo info, StreamingContext ctxt)
-        {
- 
-        }
         public Message(string from, string to, string time, string content, int flag)
         {
             setFrom(from);
@@ -62,11 +58,7 @@ namespace DummyChatTool
         {
             strContent = str;
         }
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-        {
-
-        }
-
+ 
         private string strFrom;
         private string strTo;
         private string strTime;

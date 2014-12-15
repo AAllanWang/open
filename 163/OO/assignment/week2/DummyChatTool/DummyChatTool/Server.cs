@@ -187,36 +187,39 @@ namespace DummyChatTool
                 RemoveClient(msg.getFrom());
                 foreach (Client c in listClient)
                 {
-                     c.RecvMessage(msg);
-
+                   c.RecvMessage(msg);
                 }
             }
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-
+            info.AddValue("client_num", listClient.Count);
+            foreach (Client c in listClient)
+            {
+                info.AddValue("",c.getContacts().ToArray());
+            }
         }
-/*
-        public byte[] SerializeBinary(object request)
-        {
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            System.IO.MemoryStream memStream = new System.IO.MemoryStream();
-            serializer.Serialize(memStream, request);
-            return memStream.GetBuffer();
-        }
+        /*
+                public byte[] SerializeBinary(object request)
+                {
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    System.IO.MemoryStream memStream = new System.IO.MemoryStream();
+                    serializer.Serialize(memStream, request);
+                    return memStream.GetBuffer();
+                }
 
-        public object DeserializeBinary(byte[] buf)
-        {
-            System.IO.MemoryStream memStream = new MemoryStream(buf);
-            memStream.Position = 0;
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter deserializer =
-                new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            object newobj = deserializer.Deserialize(memStream);
-            memStream.Close();
-            return newobj;
-        }  
-*/
+                public object DeserializeBinary(byte[] buf)
+                {
+                    System.IO.MemoryStream memStream = new MemoryStream(buf);
+                    memStream.Position = 0;
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter deserializer =
+                        new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    object newobj = deserializer.Deserialize(memStream);
+                    memStream.Close();
+                    return newobj;
+                }  
+        */
         private static Server instance = null;
         private List<Client> listClient;
     }
