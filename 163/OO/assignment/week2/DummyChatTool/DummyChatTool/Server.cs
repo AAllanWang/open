@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Reflection;
 namespace DummyChatTool
 {
     public partial class Server : Form
@@ -21,37 +24,90 @@ namespace DummyChatTool
 
         private void Init()
         {
-            if (System.IO.File.Exists("config.bin"))
+            if (System.IO.File.Exists("config.xml"))
             {
-                Deserialize("config.bin");
+                Deserialize("config.xml");
             }
         }
 
         private void Serialize(string configFile)
         {
-            System.IO.FileStream fs = new FileStream(configFile, FileMode.Create);
-            BinaryWriter bw = new BinaryWriter(fs);
-            bw.Write(listClient.Count);
-            foreach(Client c in listClient)
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml("<Config></Config>");
+            
+            foreach (Client c in listClient)
             {
+                XmlElement itemClient = xmlDoc.CreateElement("Client");
+                itemClient.SetAttribute("Name", c.GetName());
+                List<Message> listMsg = c.getMessageList();
                 
+                foreach (Message msg in listMsg)
+                {
+                    XmlElement elementMsg = xmlDoc.CreateElement("Message");
+                    PropertyInfo[] properties = msg.GetType().GetProperties();
+                    foreach (PropertyInfo property in properties)
+                    {
+                        if (property.GetValue(msg, null) != null)
+                        {
+                            XmlElement element = xmlDoc.CreateElement(property.Name);
+                            element.SetAttribute("Type", property.PropertyType.Name);
+                            element.InnerText = property.GetValue(msg, null).ToString();
+                            elementMsg.AppendChild(element);
+                        }
+                    }
+                    itemClient.AppendChild(elementMsg);
+                }
+                xmlDoc.DocumentElement.AppendChild(itemClient);
             }
-           // bw.Write(this.textBox1.Text);
-            //
-            bw.Flush();
-            //
-            bw.Close();
-            fs.Close();
+            xmlDoc.Save(configFile);
         }
 
         private void Deserialize(string configFile)
         {
+            List<string> listClientName = new List<string>();
+            List<Message> listAllMsg = new List<Message>();
 
+            XmlDocument XmlDoc = new XmlDocument();
+            XmlDoc.Load(configFile);
+            foreach (XmlNode itemClient in XmlDoc.GetElementsByTagName("Config").Item(0).ChildNodes)
+            {
+                string strClientName = itemClient.Attributes["Name"].Value;
+                listClientName.Add(strClientName);
+                foreach (XmlNode itemMsg in itemClient.ChildNodes)
+                {
+                    Message msg = Activator.CreateInstance<Message>();
+                    PropertyInfo[] properties = typeof(Message).GetProperties();
+                    foreach (XmlNode propertyNode in itemMsg.ChildNodes)
+                    {
+                        string name = propertyNode.Name;
+                        string type = propertyNode.Attributes["Type"].Value;
+                        string value = propertyNode.InnerXml;
+                        foreach (PropertyInfo property in properties)
+                        {
+                            if (name == property.Name)
+                            {
+                                property.SetValue(msg, Convert.ChangeType(value, property.PropertyType), null);
+                            }
+                        }
+                    }
+                    listAllMsg.Add(msg);
+                }
+            }
+
+            foreach (string strCli in listClientName)
+            {
+
+                AddNewUser(strCli, new List<string>(listClientName));
+            }
+            foreach (Message msg in listAllMsg)
+            {
+                ForwardMessage(msg);
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            Serialize("config");
+            Serialize("config.xml");
         }
 
         public static Server GetInstance()
@@ -69,6 +125,15 @@ namespace DummyChatTool
             this.Text = "\"在线聊天\"仿真程序----单进程版";
         }
 
+        private void AddNewUser(string strName,List<string> listCont)
+        {
+            Client client = new Client(strName, listCont);
+            listClient.Add(client);
+            this.listBox_onlineUsers.Items.Add(strName);
+            client.Show();
+            this.NotifyToAll(strName);
+        }
+
         private void button_addNew_Click(object sender, EventArgs e)
         {
             string name = this.textBox_name.Text.Trim();
@@ -80,11 +145,7 @@ namespace DummyChatTool
             {
                 if (IsUserNameOK(name))
                 {
-                    Client client = new Client(name, this.GetContacts());
-                    listClient.Add(client);
-                    this.listBox_onlineUsers.Items.Add(name);
-                    client.Show();
-                    this.NotifyToAll(name);
+                    AddNewUser(name, this.GetContacts());
                 }
                 else
                 {
@@ -163,49 +224,36 @@ namespace DummyChatTool
 
         public void ForwardMessage(DummyChatTool.Message msg)
         {
-            if (msg.getFlag() == 1)// welcome msg from new comer to all
+            if (msg.Flag == 1)// welcome msg from new comer to all
             {
 
             }
-            else if (msg.getFlag() == 2) // chat msg
+            else if (msg.Flag == 2) // chat msg
             {
-                Client c = GetClientByName(msg.getTo());
+                Client c = GetClientByName(msg.To);
                 if (c != null)
                 {
                     c.RecvMessage(msg);
                 }
             }
-            else if (msg.getFlag() == 3) // goodbye msg
+            else if (msg.Flag == 3) // goodbye msg
             {
-                RemoveClient(msg.getFrom());
+                RemoveClient(msg.From);
                 foreach (Client c in listClient)
                 {
                    c.RecvMessage(msg);
                 }
             }
+            else if(msg.Flag==4) // to self
+            {
+                Client c = GetClientByName(msg.From);
+                if (c != null)
+                {
+                    c.RecvMessage(msg);
+                }
+            }
         }
 
-
-        /*
-                public byte[] SerializeBinary(object request)
-                {
-                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    System.IO.MemoryStream memStream = new System.IO.MemoryStream();
-                    serializer.Serialize(memStream, request);
-                    return memStream.GetBuffer();
-                }
-
-                public object DeserializeBinary(byte[] buf)
-                {
-                    System.IO.MemoryStream memStream = new MemoryStream(buf);
-                    memStream.Position = 0;
-                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter deserializer =
-                        new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    object newobj = deserializer.Deserialize(memStream);
-                    memStream.Close();
-                    return newobj;
-                }  
-        */
         private static Server instance = null;
         private List<Client> listClient;
     }

@@ -22,7 +22,10 @@ namespace DummyChatTool
             this.comboBox_currentUser.Items.Clear();
             foreach (string str in listContacts)
             {
-                this.comboBox_currentUser.Items.Add(str);
+                if (str != this.name)
+                {
+                    this.comboBox_currentUser.Items.Add(str);
+                }
             }
         }
 
@@ -38,27 +41,36 @@ namespace DummyChatTool
 
         private void SendMessage(DummyChatTool.Message msg)
         {
-            this.textBox_msgHist.Text += "to:  " + msg.getTo() + "    " + msg.getTime() + Environment.NewLine + msg.getContent() + Environment.NewLine;
+            Message m = new Message(msg.From,msg.To,msg.Time,msg.Content,4);
+            //this.textBox_msgHist.Text += "to:  " + msg.To + "    " + msg.Time + Environment.NewLine + msg.Content + Environment.NewLine;
+            Server.GetInstance().ForwardMessage(m);
             Server.GetInstance().ForwardMessage(msg);
         }
 
         public void RecvMessage(DummyChatTool.Message msg)
         {
             listMsg.Add(msg);
-            if (msg.getFlag() == 1)
+            if (msg.Flag == 1)
             {
-                this.comboBox_currentUser.Items.Add(msg.getFrom());
-                this.listContacts.Add(msg.getFrom());
+                if (!this.listContacts.Contains(msg.From))
+                {
+                    this.comboBox_currentUser.Items.Add(msg.From);
+                    this.listContacts.Add(msg.From);
+                }
             }
-            else if (msg.getFlag() == 2)
+            else if (msg.Flag == 2)
             {
-                this.textBox_msgHist.Text += "from:  " + msg.getFrom() + "    " + msg.getTime() + Environment.NewLine + msg.getContent() + Environment.NewLine;
+                this.textBox_msgHist.Text += "from:  " + msg.From + "    " + msg.Time + Environment.NewLine + msg.Content + Environment.NewLine;
             }
-            else if (msg.getFlag() == 3)
+            else if (msg.Flag == 3)
             {
-                this.comboBox_currentUser.Items.Remove(msg.getFrom());
-                this.listContacts.Remove(msg.getFrom());
-                //this.textBox_msgHist.Text += "from:  " + msg.getFrom() + "    " + msg.getTime() + Environment.NewLine + msg.getContent() + Environment.NewLine;
+                this.comboBox_currentUser.Items.Remove(msg.From);
+                this.listContacts.Remove(msg.From);
+                //this.textBox_msgHist.Text += "from:  " + msg.From + "    " + msg.Time + Environment.NewLine + msg.Content + Environment.NewLine;
+            }
+            else if (msg.Flag == 4)
+            {
+                this.textBox_msgHist.Text += "to:  " + msg.To + "    " + msg.Time + Environment.NewLine + msg.Content + Environment.NewLine;
             }
         }
 
@@ -103,8 +115,7 @@ namespace DummyChatTool
             return listContacts;
         }
 
-        private string name;
-        
+        private string name;    
         private List<string> listContacts;
         private List<Message> listMsg;
 

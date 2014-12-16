@@ -10,59 +10,52 @@ namespace DummyChatTool
     [Serializable]
     public class Message 
     {
+        public Message()
+        {
+            From = "";
+            To = "";
+            Time = "";
+            Content = "";
+            Flag = 0;
+        }
         public Message(string from, string to, string time, string content, int flag)
         {
-            setFrom(from);
-            setTo(to);
-            setTime(time);
-            setContent(content);
-            setFlag(flag);
+            From = from;
+            To=to;
+            Time=time;
+            Content=content;
+            Flag=flag;
         }
-        public string getFrom()
+        public string From
         {
-            return strFrom;
+            get { return strFrom; }
+            set { strFrom = value; }
         }
-        public void setFrom(string str)
+        public string To
         {
-            strFrom = str;
+            get { return strTo; }
+            set { strTo = value; }
         }
-        public string getTo()
+        public string Time
         {
-            return strTo;
+            get { return strTime; }
+            set { strTime = value; }
         }
-        public void setTo(string str)
+        public string Content
         {
-            strTo = str;
+            get { return strContent; }
+            set { strContent = value; }
         }
-        public string getTime()
+        public int Flag
         {
-            return strTime;
+            get { return iFlag; }
+            set { iFlag = value; }
         }
-        public void setTime(string str)
-        {
-            strTime = str;
-        }
-        public int getFlag()
-        {
-            return iFlag;
-        }
-        public void setFlag(int i)
-        {
-            iFlag = i;
-        }
-        public string getContent()
-        {
-            return strContent;
-        }
-        public void setContent(string str)
-        {
-            strContent = str;
-        }
- 
+
         private string strFrom;
         private string strTo;
         private string strTime;
         private string strContent;
-        private int iFlag;
+        private int iFlag; 
     }
 }
