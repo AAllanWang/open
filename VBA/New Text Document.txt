@@ -1,0 +1,21 @@
+Private Sub CommandButton1_Click()
+    Dim str As String
+    For i = 4 To 25
+        str = str & getTable(Sheet1.Cells(i, 3), Sheet1.Cells(i, 6), Sheet1.Cells(i, 5), Sheet1.Cells(i, 7), Sheet1.Cells(i, 7))
+        
+        'For j = 2 To 8
+        'Sheet3.Cells(i, j) = Sheet1.Cells(i, j)
+        'Next j
+    Next i
+    Sheet3.Cells(1, 1) = str
+End Sub
+
+Private Function getTable(priority As String, manday As String, task As String, dod As String, owner As String)
+    strTable = "<table border='1' bordercolor='#000000'><tr><td>Priority " & priority
+    strTable = strTable & "</td><td> " & manday
+    strTable = strTable & "Mandays</td></tr><tr><td colspan='2' >Task:" & task
+    strTable = strTable & "</td></tr><tr><td colspan='2'>Dod:"
+    strTable = strTable & "</td></tr><tr><td>Owner: "
+    strTable = strTable & "</td><td>" & owner & "</td></tr></table>"
+    getTable = strTable & "<p/>"
+End Function
