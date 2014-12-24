@@ -34,9 +34,24 @@ def TheDayToMonthEnd(y,m):
 def LeftDaysFromMonthEnd(y,m):
 	return DaysOfYear(y) - TheDayToMonthEnd(y,m)
 
+
+def WhatDayOfYearMonthEnd(y,m):
+	s = 0
+	ret = 0
+	if y >= 1800:
+		for i in range(1800,y):
+			s += DaysOfYear(i)
+		s += TheDayToMonthEnd(y,m)
+		ret = (s+2)%7
+	elif y < 1800:
+		for i in range(y+1,1800):
+			s += DaysOfYear(i)
+		s += LeftDaysFromMonthEnd(y,m)
+		ret = 6 - (s+4)%7
+	return ret	
 year = int(raw_input())
 month = int(raw_input())
 
 
-
-print year,month
+	
+print WhatDayOfYearMonthEnd(year,month)
