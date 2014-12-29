@@ -44,8 +44,8 @@ public class FileTree extends JPanel{
 			public void valueChanged(TreeSelectionEvent tse) {
 				TreePath tp = tse.getNewLeadSelectionPath();
 				Object o = tp.getLastPathComponent();
-				DefaultMutableTreeNode curNode =(DefaultMutableTreeNode)o; 
-				FileNode node = (FileNode) curNode.getUserObject();
+				final DefaultMutableTreeNode curNode =(DefaultMutableTreeNode)o; 
+				final FileNode node = (FileNode) curNode.getUserObject();
 				filelist.setNode(node);
 				SwingUtilities.invokeLater(new Runnable() {   
 					public void run() {
