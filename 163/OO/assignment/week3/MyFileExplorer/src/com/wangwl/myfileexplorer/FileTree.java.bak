@@ -1,0 +1,151 @@
+package com.wangwl.myfileexplorer;
+
+import java.awt.Component;
+import java.io.File;
+import java.util.Vector;
+
+import javax.swing.Icon;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+
+public class FileTree extends JTree{
+	private FileList filelist;
+	
+	public FileTree(FileList list) {
+		filelist = list;
+		
+		setModel(new FileTreeModel());
+		//DefaultMutableTreeNode root = new DefaultMutableTreeNode(FileSystemView.getFileSystemView().getHomeDirectory());
+		
+		setCellRenderer(new FileTreeRenderer());
+		addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent tse) {
+			}
+		});
+		this.setSelectionRow(0);
+	}
+
+	public void fireValueChanged(TreeSelectionEvent tse) {
+		TreePath tp = tse.getNewLeadSelectionPath();
+		Object o = tp.getLastPathComponent();
+		
+		SwingUtilities.invokeLater(new Runnable() {   
+			public void run() {   
+				filelist.setNode((FileNode) o);
+			}   
+		});  
+		
+	}
+}
+
+class FileNode {
+	private File file;
+	public FileNode(File f){
+		file = f;
+	}
+	public File getFile()
+	{
+		return file;
+	}
+	public String toString(){
+		return FileSystemView.getFileSystemView().getSystemDisplayName(file);
+	}
+}
+
+class FileTreeModel implements TreeModel {
+	private FileSystemView fsv;
+	public FileTreeModel(){
+		fsv = FileSystemView.getFileSystemView(); 
+	}
+	
+	@Override
+	public void addTreeModelListener(TreeModelListener l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object getChild(Object parent, int index) {
+		// TODO Auto-generated method stub
+		return new FileNode(fsv.getFiles(((FileNode)parent).getFile(),true)[index]);
+		//return null;
+	}
+
+	@Override
+	public int getChildCount(Object parent) {
+		// TODO Auto-generated method stub
+		return fsv.getFiles(((FileNode)(parent)).getFile(),true).length;
+		//return 0;
+	}
+
+	@Override
+	public int getIndexOfChild(Object parent, Object child) {
+		// TODO Auto-generated method stub
+		int ret = 0;
+		File[] files = fsv.getFiles(((FileNode)parent).getFile(),true);
+		for(int i=0;i<files.length;i++){
+			if(files[i].equals(((FileNode)child).getFile())){
+				ret = i;
+				break;
+			}
+		}
+		//return 0;
+		return ret;
+	}
+
+	@Override
+	public Object getRoot() {
+		// TODO Auto-generated method stub
+		return new FileNode(fsv.getHomeDirectory());
+	}
+
+	@Override
+	public boolean isLeaf(Object node) {
+		// TODO Auto-generated method stub
+		return fsv.getFiles(((FileNode)node).getFile(), true).length == 0;
+	}
+
+	@Override
+	public void removeTreeModelListener(TreeModelListener l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void valueForPathChanged(TreePath path, Object newValue) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+class FileTreeRenderer extends DefaultTreeCellRenderer {
+	private FileSystemView fsv;
+	public FileTreeRenderer(){
+		fsv = FileSystemView.getFileSystemView();
+	}
+	public Component getTreeCellRendererComponent(JTree tree, 
+													Object value,
+													boolean sel, 
+													boolean expanded, 
+													boolean leaf, 
+													int row,
+													boolean hasFocus) {
+		FileNode node = (FileNode) ((DefaultMutableTreeNode)value).getUserObject();
+		Icon icon =fsv.getSystemIcon(((FileNode)node).getFile());;
+		//Icon icon = fsv.getSystemIcon(((FileNode)value).getFile());
+		setLeafIcon(icon);
+		setOpenIcon(icon);
+		setClosedIcon(icon);
+		
+		return super.getTreeCellRendererComponent(tree, value, sel, expanded,
+		leaf, row, hasFocus);
+	}
+}
