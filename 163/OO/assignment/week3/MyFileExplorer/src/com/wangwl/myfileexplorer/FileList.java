@@ -13,9 +13,11 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
@@ -25,10 +27,8 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FileList extends JList implements MouseListener{
 	private FileListModel dataModel;
-	private FileNode[] copySrcFiles;
 	public FileList(){
 		//setLayoutOrientation(HORIZONTAL_WRAP);
-		copySrcFiles = null;
 		dataModel = new FileListModel();
 		setModel(dataModel);
 		setCellRenderer(new MyCellRenderer());
@@ -38,6 +38,9 @@ public class FileList extends JList implements MouseListener{
 		clearSelection();
 		dataModel.setNode(file);
 		updateUI();
+	}
+	public FileNode getNode(){
+		return dataModel.getNode();
 	}
 	
 	@Override
@@ -77,8 +80,7 @@ public class FileList extends JList implements MouseListener{
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if(arg0.getButton()==MouseEvent.BUTTON3){
-			
-			new MyPopupMenu(this).show(this,arg0.getX(),arg0.getY());
+			MyPopupMenu.getInstance(this).show(this,arg0.getX(),arg0.getY());
 		}
 	}
 	@Override
@@ -93,9 +95,13 @@ class FileListModel implements ListModel {
 	private FileSystemView fsv;
 	public FileListModel(){
 		fsv = FileSystemView.getFileSystemView();
+		fileNode = null;
 	}
 	public void setNode(FileNode f){
 		fileNode = f;
+	}
+	public FileNode getNode(){
+		return fileNode;
 	}
 
 	@Override
@@ -191,8 +197,21 @@ class MyCellRenderer extends JLabel implements ListCellRenderer {
 
 class MyPopupMenu extends JPopupMenu {
 	private FileList filelist;
-	public MyPopupMenu(FileList fl){
+	private Object[] srcfilenodes;
+	private static MyPopupMenu popMenu = null;
+	public static MyPopupMenu getInstance(FileList fl){
+		if(popMenu == null){
+			popMenu = new MyPopupMenu(fl);
+		}
+		popMenu.setFileList(fl);
+		return popMenu;
+	}
+	private void setFileList(FileList fl){
+		filelist = fl;
+	}
+	private MyPopupMenu(FileList fl){
 		filelist =fl;
+		srcfilenodes = null;
 		JMenuItem menuItemCopy = new JMenuItem("Copy");
 		JMenuItem menuItemPaste = new JMenuItem("Paste");
 		JMenuItem menuItemDelete = new JMenuItem("Delete");
@@ -205,25 +224,55 @@ class MyPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				Object[] filenodes = filelist.getSelectedValues();
-				for(int i = 0;i< filenodes.length;i++){
-					System.out.println(filenodes[i].toString());
-				}
+				srcfilenodes = filelist.getSelectedValues();
+				
 			}});
 
 		menuItemPaste.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-
+		    	new Thread(){
+		    		public void run(){
+		    			if(srcfilenodes != null && srcfilenodes.length>0){
+		    				WaitDialog.launchWaitDialog("Copy Files", null);;
+		    				
+			    			for(int i=0;i<srcfilenodes.length;i++){
+			    				try {
+									Utils.copy(((FileNode)srcfilenodes[i]).getFile(), filelist.getNode().getFile());
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+			    			}
+			    			WaitDialog.endWaitDialog();
+			    			filelist.setNode(filelist.getNode());
+		    			}
+		    				
+		    		}
+		    	}.start();
 		    }});
 
 		menuItemDelete.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	new Thread(){
+		    		public void run(){
+						Object[] delObjs = filelist.getSelectedValues();
+						if (delObjs.length > 0) {
+							WaitDialog.launchWaitDialog("Delete Files", null);
+
+							for (int i = 0; i < delObjs.length; i++) {
+								Utils.delete(((FileNode) delObjs[i]).getFile());
+							}
+							WaitDialog.endWaitDialog();
+							filelist.setNode(filelist.getNode());
+						}
+		    		}
+		    	}.start();
+
 		    }});
 
 		add(menuItemCopy);
 		add(menuItemPaste);
 		add(menuItemDelete);
-		add(menuItemMove);
+		//add(menuItemMove);
 	}
 }
