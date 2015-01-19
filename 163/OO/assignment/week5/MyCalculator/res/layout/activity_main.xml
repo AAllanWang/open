@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearly"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="3dip"
+    android:orientation="vertical" >
+
+    <EditText  
+       android:id="@+id/hist"  
+       android:layout_width="match_parent"  
+       android:layout_height="30dp"
+       android:layout_marginLeft="2dp"  
+       android:layout_marginRight="2dp"
+       android:background="#eee" />
+    <EditText  
+       android:id="@+id/input"  
+       android:layout_width="match_parent"  
+       android:layout_height="30dp"  
+       android:layout_marginLeft="2dp"  
+       android:layout_marginRight="2dp"  
+       android:background="#eee" />  
+     <TableLayout
+        android:id="@+id/tbl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:id="@+id/tablerow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="0.2"
+            android:layout_marginTop="2dp"  
+            android:layout_marginBottom="2dp">
+			<Button android:id="@+id/mod" android:text="@string/mod" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/clean" android:text="@string/clean" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/leftp" android:text="@string/leftparentheses" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/rightp" android:text="@string/rightparentheses" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/backspace" android:text="@string/backspace" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="0.2"
+            android:layout_marginTop="2dp"  
+            android:layout_marginBottom="2dp">
+            <Button android:id="@+id/sin" android:text="@string/sin" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/num7" android:text="@string/num7" android:layout_height="match_parent" android:layout_weight="0.2"  android:layout_marginLeft="1dp" android:layout_marginRight="1dp"  />
+            <Button android:id="@+id/num8" android:text="@string/num8" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"  />
+            <Button android:id="@+id/num9" android:text="@string/num9" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/div" android:text="@string/div" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="0.2"
+            android:layout_marginTop="2dp"  
+            android:layout_marginBottom="2dp">
+			<Button android:id="@+id/cos" android:text="@string/cos" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/num4" android:text="@string/num4" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/num5" android:text="@string/num5" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/num6" android:text="@string/num6" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/mult" android:text="@string/mult" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="0.2"
+            android:layout_marginTop="2dp"  
+            android:layout_marginBottom="2dp">
+			<Button android:id="@+id/tan" android:text="@string/tan" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/num1" android:text="@string/num1" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/num2" android:text="@string/num2" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/num3" android:text="@string/num3" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/sub" android:text="@string/sub" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="0.2"
+            android:layout_marginTop="2dp"  
+            android:layout_marginBottom="2dp">
+			<Button android:id="@+id/log" android:text="@string/log" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" />
+            <Button android:id="@+id/num0" android:text="@string/num0" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/point" android:text="@string/point" android:layout_height="match_parent" android:layout_weight="0.2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/equal" android:text="@string/equal" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7EC0EE"  android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+            <Button android:id="@+id/add" android:text="@string/add" android:layout_height="match_parent" android:layout_weight="0.2" android:background="#7F7F7F" android:layout_marginLeft="1dp" android:layout_marginRight="1dp"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyCalculator</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="settings_exit">Exit</string>
+    <string name="settings_info">Info</string>
+    <string name="inputhint"/>
+    <string name="mod">%</string>
+    <string name="clean">C</string>
+    <string name="leftparentheses">(</string>
+    <string name="rightparentheses">)</string>
+    <string name="backspace">back</string>
+    <string name="sin">sin</string>
+    <string name="num7">7</string>
+    <string name="num8">8</string>
+    <string name="num9">9</string>
+    <string name="cos">cos</string>
+    <string name="num4">4</string>
+    <string name="num5">5</string>
+    <string name="num6">6</string>
+    <string name="tan">tan</string>
+    <string name="num1">1</string>
+    <string name="num2">2</string>
+    <string name="num3">3</string>
+    <string name="div">/</string>
+    <string name="mult">*</string>
+    <string name="sub">-</string>
+    <string name="log">log</string>
+    <string name="num0">0</string>
+    <string name="point">.</string>
+    <string name="equal">=</string>
+    <string name="add">+</string>
+    
+</resources>

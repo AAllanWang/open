@@ -1,0 +1,20 @@
+[Application]
+WindowPlacement=2 3 -32000 -32000 -1 -1 25 25 1050 551
+[Editor1]
+FileName=.\ExpressionParser.y
+ReadOnly=0
+WindowPlacement1=0 1 -1 -1 -8 -30 -1 -3 682 633
+WindowOrder1=1
+Position001=0 60
+Cursor001=2 95 2 95
+SyntaxColouring=2
+TargetSyntaxColouring=4
+[Editor2]
+FileName=.\ExpressionLexer.l
+ReadOnly=0
+WindowPlacement1=0 1 -1 -1 -1 -1 681 0 1360 633
+WindowOrder1=2
+Position001=0 41
+Cursor001=12 56 12 56
+SyntaxColouring=1
+TargetSyntaxColouring=4
